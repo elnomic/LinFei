@@ -4,36 +4,26 @@ import { useEffect, useState } from 'react'
 import { 
   Wallet, 
   TrendingUp, 
-  TrendingDown, 
-  ArrowUpRight, 
-  ArrowDownRight,
-  Award,
-  BarChart3,
   Clock,
-  DollarSign
+  BarChart3
 } from 'lucide-react'
-import { formatCurrency, formatNumber, cn } from '@/lib/utils'
-import { DashboardStats } from './dashboard-stats'
+import { formatCurrency } from '@/lib/utils'
 import { DashboardChart } from './dashboard-chart'
 import { QuickTradeButton } from '../trade/quick-trade-button'
 import { PortfolioAllocation } from './portfolio-allocation'
 import { TopMarkets } from './top-markets'
+import { cn } from '@/lib/utils'
 
 export function DashboardContent() {
   const [user, setUser] = useState<any>(null)
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     totalBalance: 0,
     unrealizedPnl: 0,
-    realizedPnl: 0,
     todayPnl: 0,
     openPositions: 0,
-    tradingVolume: 0,
-    winRate: 0,
-    totalPoints: 0,
   })
 
   useEffect(() => {
-    // Load user from localStorage
     const userData = localStorage.getItem('linfei_user')
     if (userData) {
       setUser(JSON.parse(userData))
@@ -62,20 +52,17 @@ export function DashboardContent() {
             title="Total Balance"
             value={formatCurrency(stats.totalBalance)}
             icon={Wallet}
-            trend="+2.5%"
           />
           <StatCard
             title="Unrealized PnL"
             value={formatCurrency(stats.unrealizedPnl)}
             icon={TrendingUp}
-            trend="+1.2%"
             valueColor={stats.unrealizedPnl >= 0 ? 'text-success' : 'text-danger'}
           />
           <StatCard
             title="Today's PnL"
             value={formatCurrency(stats.todayPnl)}
             icon={Clock}
-            trend="+0.8%"
             valueColor={stats.todayPnl >= 0 ? 'text-success' : 'text-danger'}
           />
           <StatCard
@@ -87,14 +74,6 @@ export function DashboardContent() {
 
         {/* Chart */}
         <div className="bg-card rounded-lg p-4 border border-border">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">Portfolio Performance</h3>
-            <div className="flex gap-2">
-              <button className="text-xs px-2 py-1 rounded bg-primary/10 text-primary">1D</button>
-              <button className="text-xs px-2 py-1 rounded hover:bg-muted">1W</button>
-              <button className="text-xs px-2 py-1 rounded hover:bg-muted">1M</button>
-            </div>
-          </div>
           <DashboardChart />
         </div>
 
@@ -112,13 +91,11 @@ function StatCard({
   title, 
   value, 
   icon: Icon, 
-  trend, 
   valueColor 
 }: { 
   title: string
   value: string
   icon: any
-  trend?: string
   valueColor?: string
 }) {
   return (
@@ -129,9 +106,6 @@ function StatCard({
           <p className={cn("text-lg font-semibold mt-1", valueColor)}>
             {value}
           </p>
-          {trend && (
-            <p className="text-xs text-success mt-1">{trend}</p>
-          )}
         </div>
         <div className="p-2 rounded-lg bg-primary/10 text-primary">
           <Icon className="w-4 h-4" />
@@ -139,4 +113,4 @@ function StatCard({
       </div>
     </div>
   )
-      }
+          }
