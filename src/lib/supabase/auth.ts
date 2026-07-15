@@ -1,4 +1,4 @@
-import { createClient } from './client'
+import { supabase } from './client'
 import { User } from '@supabase/supabase-js'
 
 export interface AuthUser {
@@ -7,8 +7,6 @@ export interface AuthUser {
   username?: string
   email?: string
 }
-
-export const supabase = createClient()
 
 export async function signInWithWallet(walletAddress: string): Promise<{
   user: AuthUser | null
@@ -69,6 +67,5 @@ function generateReferralCode(): string {
 }
 
 export async function signOut() {
-  // Clear local session
   localStorage.removeItem('linfei_user')
 }
