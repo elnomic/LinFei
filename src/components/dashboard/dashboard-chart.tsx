@@ -1,56 +1,41 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
-declare global {
-  interface Window {
-    TradingView: any
-  }
-}
+const data = [
+  { time: '00:00', value: 42000 },
+  { time: '04:00', value: 42500 },
+  { time: '08:00', value: 43000 },
+  { time: '12:00', value: 42800 },
+  { time: '16:00', value: 43250 },
+  { time: '20:00', value: 43500 },
+]
 
 export function DashboardChart() {
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!containerRef.current) return
-
-    const script = document.createElement('script')
-    script.src = 'https://s3.tradingview.com/tv.js'
-    script.async = true
-    script.onload = () => {
-      if (window.TradingView && containerRef.current) {
-        new window.TradingView.widget({
-          container: containerRef.current,
-          width: '100%',
-          height: 300,
-          symbol: 'BTCUSD',
-          interval: '15',
-          timezone: 'Etc/UTC',
-          theme: 'dark',
-          style: '1',
-          locale: 'en',
-          toolbar_bg: '#151515',
-          enable_publishing: false,
-          hide_side_toolbar: false,
-          allow_symbol_change: false,
-          details: false,
-          hotlist: false,
-          calendar: false,
-          news: [],
-        })
-      }
-    }
-    document.head.appendChild(script)
-
-    return () => {
-      document.head.removeChild(script)
-    }
-  }, [])
-
   return (
-    <div 
-      ref={containerRef} 
-      className="w-full h-[300px] rounded-lg overflow-hidden"
-    />
+    <div className="w-full h-[300px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <LineChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
+          <XAxis dataKey="time" stroke="#6b7280" fontSize={12} />
+          <YAxis stroke="#6b7280" fontSize={12} domain={['auto', 'auto']} />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: '#151515',
+              border: '1px solid #2a2a2a',
+              borderRadius: '8px',
+            }}
+            labelStyle={{ color: '#a0a0a0' }}
+          />
+          <Line 
+            type="monotone" 
+            dataKey="value" 
+            stroke="#5B8CFF" 
+            strokeWidth={2}
+            dot={false}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   )
 }
