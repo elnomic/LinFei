@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Wallet, Loader2 } from 'lucide-react'
 import { signInWithWallet } from '@/lib/supabase/auth'
@@ -22,20 +22,16 @@ export function ConnectWallet({ className }: { className?: string }) {
       setLoading(true)
       setError(null)
 
-      // Check if MetaMask is installed
       if (!window.ethereum) {
         setError('Please install MetaMask or another Web3 wallet')
         return
       }
 
-      // Request account access
       const accounts = await window.ethereum.request({
         method: 'eth_requestAccounts'
       })
 
       const walletAddress = accounts[0]
-
-      // Sign in with wallet
       const { user, error: authError } = await signInWithWallet(walletAddress)
 
       if (authError) {
@@ -43,7 +39,6 @@ export function ConnectWallet({ className }: { className?: string }) {
       }
 
       if (user) {
-        // Store user in localStorage
         localStorage.setItem('linfei_user', JSON.stringify(user))
         router.push('/dashboard')
       }
