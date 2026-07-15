@@ -1,91 +1,70 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import { cn } from '@/lib/utils'
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
-declare global {
-  interface Window {
-    TradingView: any
+const generateChartData = () => {
+  const data = []
+  let price = 43250
+  for (let i = 0; i < 100; i++) {
+    const change = (Math.random() - 0.5) * 100
+    price += change
+    data.push({
+      time: i,
+      price: Math.round(price * 100) / 100
+    })
   }
+  return data
 }
 
 interface TradingChartProps {
   pair: string
-  className?: string
 }
 
-export function TradingChart({ pair, className }: TradingChartProps) {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const widgetRef = useRef<any>(null)
-
-  useEffect(() => {
-    if (!containerRef.current) return
-
-    const script = document.createElement('script')
-    script.src = 'https://s3.tradingview.com/tv.js'
-    script.async = true
-    
-    script.onload = () => {
-      if (window.TradingView && containerRef.current) {
-        // Clean up existing widget
-        if (widgetRef.current) {
-          widgetRef.current.remove()
-        }
-
-        widgetRef.current = new window.TradingView.widget({
-          container: containerRef.current,
-          width: '100%',
-          height: 400,
-          symbol: `${pair}USD`,
-          interval: '15',
-          timezone: 'Etc/UTC',
-          theme: 'dark',
-          style: '1',
-          locale: 'en',
-          toolbar_bg: '#151515',
-          enable_publishing: false,
-          hide_side_toolbar: false,
-          allow_symbol_change: true,
-          details: false,
-          hotlist: false,
-          calendar: false,
-          news: [],
-          studies: [
-            'MASimple@tv-basicstudies',
-            'RSI@tv-basicstudies',
-            'MACD@tv-basicstudies'
-          ],
-          overrides: {
-            'paneProperties.background': '#151515',
-            'paneProperties.vertGridProperties.color': '#2a2a2a',
-            'paneProperties.horzGridProperties.color': '#2a2a2a',
-          },
-          time_frames: [
-            { text: '1m', resolution: '1' },
-            { text: '5m', resolution: '5' },
-            { text: '15m', resolution: '15' },
-            { text: '1H', resolution: '60' },
-            { text: '4H', resolution: '240' },
-            { text: '1D', resolution: 'D' },
-          ],
-        })
-      }
-    }
-
-    document.head.appendChild(script)
-
-    return () => {
-      document.head.removeChild(script)
-      if (widgetRef.current) {
-        widgetRef.current.remove()
-      }
-    }
-  }, [pair])
+export function TradingChart({ pair }: TradingChartProps) {
+  const data = generateChartData()
 
   return (
-    <div className={cn("bg-card rounded-lg border border-border p-4", className)}>
+    <div className="bg-card rounded-lg border border-border p-4">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-medium text-muted-foreground">{pair}/USD</span>
+          <span className="text-xs text-success">▲ 2.5%</span>
+        </div>
+        <div className="flex gap-1">
+          {['1m', '5m', '15m', '1H', '4H', '1D'].map((tf) => (
+            <button
+              key={tf}
+              className="px-2 py-0.5 text-xs text-muted-foreground hover:text-foreground rounded transition-colors"
+            >
+              {tf}
+            </button>
+          ))}
+        </div>
+      </div>
+      
       <div className="h-[400px]">
-        <div ref={containerRef} className="w-full h-full" />
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#2a2a2a" />
+            <XAxis dataKey="time" stroke="#6b7280" fontSize={12} tick={false} />
+            <YAxis stroke="#6b7280" fontSize={12} domain={['auto', 'auto']} />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: '#151515',
+                border: '1px solid #2a2a2a',
+                borderRadius: '8px',
+              }}
+              labelStyle={{ color: '#a0a0a0' }}
+            />
+            <Line 
+              type="monotone" 
+              dataKey="price" 
+              stroke="#5B8CFF" 
+              strokeWidth={2}
+              dot={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
     </div>
   )
