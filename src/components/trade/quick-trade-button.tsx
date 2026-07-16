@@ -35,24 +35,18 @@ export function QuickTradeButton() {
             </button>
           </div>
           <div className="space-y-2">
-            <button
-              onClick={() => router.push('/trade?pair=BTC')}
-              className="w-full text-left px-3 py-2 hover:bg-muted rounded"
-            >
-              BTC/USD
-            </button>
-            <button
-              onClick={() => router.push('/trade?pair=ETH')}
-              className="w-full text-left px-3 py-2 hover:bg-muted rounded"
-            >
-              ETH/USD
-            </button>
-            <button
-              onClick={() => router.push('/trade?pair=SOL')}
-              className="w-full text-left px-3 py-2 hover:bg-muted rounded"
-            >
-              SOL/USD
-            </button>
+            {['BTC', 'ETH', 'SOL'].map((pair) => (
+              <button
+                key={pair}
+                onClick={() => {
+                  router.push(`/trade?pair=${pair}`)
+                  setIsOpen(false)
+                }}
+                className="w-full text-left px-3 py-2 hover:bg-muted rounded"
+              >
+                {pair}/USD
+              </button>
+            ))}
           </div>
         </div>
       )}
