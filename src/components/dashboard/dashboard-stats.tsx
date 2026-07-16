@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { formatCurrency } from '@/lib/utils'
-import { supabase } from '@/lib/supabase/auth'
+import { supabase } from '@/lib/supabase/client'
 
 export function DashboardStats() {
   const [stats, setStats] = useState({
@@ -30,13 +30,13 @@ export function DashboardStats() {
 
       if (account) {
         setStats({
-          totalBalance: account.balance,
-          unrealizedPnl: account.unrealized_pnl,
-          realizedPnl: account.realized_pnl,
-          todayPnl: account.unrealized_pnl, // Placeholder
-          openPositions: 0, // Will be calculated
-          tradingVolume: account.total_volume,
-          winRate: account.win_rate,
+          totalBalance: account.balance || 0,
+          unrealizedPnl: account.unrealized_pnl || 0,
+          realizedPnl: account.realized_pnl || 0,
+          todayPnl: account.unrealized_pnl || 0,
+          openPositions: 0,
+          tradingVolume: account.total_volume || 0,
+          winRate: account.win_rate || 0,
         })
       }
     }
