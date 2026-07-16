@@ -13,42 +13,44 @@ export function QuickTradeButton() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={cn(
-          "flex items-center gap-2 px-4 py-2 rounded-full",
-          "bg-primary text-primary-foreground font-medium",
-          "hover:opacity-90 active:scale-95 transition-all"
-        )}
+        className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#5B8CFF] text-white text-sm font-medium active:scale-95 transition-transform"
       >
         <ArrowUpRight className="w-4 h-4" />
         Trade
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-64 bg-card rounded-lg shadow-lg border border-border p-4 z-50">
-          <div className="flex items-center justify-between mb-3">
-            <h4 className="font-semibold">Quick Trade</h4>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-1 hover:bg-muted rounded"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-          <div className="space-y-2">
-            {['BTC', 'ETH', 'SOL'].map((pair) => (
+        <>
+          <div 
+            className="fixed inset-0 z-40" 
+            onClick={() => setIsOpen(false)}
+          />
+          <div className="absolute right-0 mt-2 w-56 bg-[#151515] rounded-xl shadow-xl border border-[#2A2A2A] p-2 z-50">
+            <div className="flex items-center justify-between px-3 py-2 border-b border-[#2A2A2A]">
+              <span className="text-sm font-medium text-white">Quick Trade</span>
               <button
-                key={pair}
-                onClick={() => {
-                  router.push(`/trade?pair=${pair}`)
-                  setIsOpen(false)
-                }}
-                className="w-full text-left px-3 py-2 hover:bg-muted rounded"
+                onClick={() => setIsOpen(false)}
+                className="p-1 hover:bg-[#2A2A2A] rounded-lg transition-colors"
               >
-                {pair}/USD
+                <X className="w-4 h-4 text-[#A0A0A0]" />
               </button>
-            ))}
+            </div>
+            <div className="py-1">
+              {['BTC', 'ETH', 'SOL', 'XRP'].map((pair) => (
+                <button
+                  key={pair}
+                  onClick={() => {
+                    router.push(`/trade?pair=${pair}`)
+                    setIsOpen(false)
+                  }}
+                  className="w-full text-left px-3 py-2 text-sm text-white hover:bg-[#2A2A2A] rounded-lg transition-colors"
+                >
+                  {pair}/USD
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </div>
   )
