@@ -3,9 +3,6 @@
 import { useState } from 'react'
 
 export function DashboardChart() {
-  const [activeTab, setActiveTab] = useState('1D')
-  
-  // Simulasi data
   const data = [
     { time: '00:00', value: 42000 },
     { time: '04:00', value: 42500 },
@@ -17,37 +14,31 @@ export function DashboardChart() {
 
   const maxValue = Math.max(...data.map(d => d.value))
   const minValue = Math.min(...data.map(d => d.value))
-  const range = maxValue - minValue
+  const range = maxValue - minValue || 1
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex gap-2">
-          {['1D', '1W', '1M'].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`text-xs px-2 py-1 rounded transition-colors ${
-                activeTab === tab ? 'bg-primary text-white' : 'hover:bg-muted'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
-        </div>
-        <span className="text-xs text-muted-foreground">+2.5%</span>
+    <div className="w-full">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs text-[#A0A0A0]">$43,500</span>
+        <span className="text-xs text-[#00D084]">+2.5%</span>
+        <span className="text-xs text-[#A0A0A0]">$42,000</span>
       </div>
       
-      <div className="h-[200px] flex items-end gap-1">
+      <div className="h-[120px] flex items-end gap-1.5">
         {data.map((d, i) => {
           const height = ((d.value - minValue) / range) * 100
+          const isGreen = i > 0 && d.value > data[i-1].value
           return (
             <div key={i} className="flex-1 flex flex-col items-center gap-1">
               <div 
-                className="w-full bg-primary/50 hover:bg-primary transition-all rounded-t-sm"
-                style={{ height: `${height}%` }}
+                className="w-full rounded-t-sm transition-all"
+                style={{ 
+                  height: `${Math.max(height, 2)}%`,
+                  backgroundColor: isGreen ? '#00D084' : '#FF5C5C',
+                  minHeight: '2px'
+                }}
               />
-              <span className="text-[10px] text-muted-foreground">{d.time}</span>
+              <span className="text-[8px] text-[#6B7280]">{d.time}</span>
             </div>
           )
         })}
