@@ -3,11 +3,11 @@
 import { createContext, useContext, ReactNode } from 'react'
 import { supabase } from '@/lib/supabase/client'
 
-const SupabaseContext = createContext<{ supabase: any }>({ supabase: null })
+const SupabaseContext = createContext<any>(null)
 
 export function SupabaseProvider({ children }: { children: ReactNode }) {
   return (
-    <SupabaseContext.Provider value={{ supabase }}>
+    <SupabaseContext.Provider value={supabase}>
       {children}
     </SupabaseContext.Provider>
   )
