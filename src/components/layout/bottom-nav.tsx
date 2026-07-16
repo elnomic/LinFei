@@ -23,7 +23,7 @@ export function BottomNav() {
   const router = useRouter()
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 glass border-t border-border/50 backdrop-blur-2xl">
       <div className="flex items-center justify-around h-16 px-2">
         {navItems.map((item) => {
           const isActive = pathname === item.path || pathname?.startsWith(item.path + '/')
@@ -34,18 +34,23 @@ export function BottomNav() {
               onClick={() => router.push(item.path)}
               className={cn(
                 "flex flex-col items-center justify-center gap-0.5 flex-1 py-1 relative",
-                "touch-target transition-colors duration-200",
+                "touch-target transition-all duration-200",
                 isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
               )}
             >
+              {isActive && (
+                <div className="absolute -top-0.5 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-primary to-purple-500 rounded-full" />
+              )}
               <item.icon className={cn(
-                "h-5 w-5 transition-transform duration-200",
+                "h-5 w-5 transition-all duration-200",
                 isActive && "scale-110"
               )} />
-              <span className="text-[10px] font-medium">{item.label}</span>
-              {isActive && (
-                <div className="absolute -top-0.5 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-primary rounded-full" />
-              )}
+              <span className={cn(
+                "text-[10px] font-medium transition-all duration-200",
+                isActive && "text-primary"
+              )}>
+                {item.label}
+              </span>
             </button>
           )
         })}
