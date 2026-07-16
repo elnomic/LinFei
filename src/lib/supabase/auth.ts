@@ -1,5 +1,4 @@
 import { supabase } from './client'
-import { User } from '@supabase/supabase-js'
 
 export interface AuthUser {
   id: string
@@ -13,7 +12,6 @@ export async function signInWithWallet(walletAddress: string): Promise<{
   error: Error | null
 }> {
   try {
-    // Check if user exists
     const { data: existingUser, error: fetchError } = await supabase
       .from('users')
       .select('*')
@@ -26,7 +24,6 @@ export async function signInWithWallet(walletAddress: string): Promise<{
 
     let user = existingUser
 
-    // If user doesn't exist, create new user
     if (!user) {
       const { data: newUser, error: createError } = await supabase
         .from('users')
@@ -40,12 +37,10 @@ export async function signInWithWallet(walletAddress: string): Promise<{
       if (createError) throw createError
       user = newUser
 
-      // Create trading account for new user
       await supabase
         .from('trading_accounts')
         .insert({ user_id: user.id })
 
-      // Initialize points for new user
       await supabase
         .from('points')
         .insert({ user_id: user.id })
