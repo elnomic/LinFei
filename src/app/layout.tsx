@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { ThemeProvider } from '@/components/theme-provider'
-import { SupabaseProvider } from '@/components/supabase-provider'
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -21,15 +19,11 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.variable} font-sans antialiased bg-background text-foreground`}>
-        <ThemeProvider>
-          <SupabaseProvider>
-            <div className="flex flex-col min-h-screen">
-              {children}
-            </div>
-          </SupabaseProvider>
-        </ThemeProvider>
+    <html lang="en" className="dark" style={{ background: '#0B0B0B' }}>
+      <body className={`${inter.variable} font-sans antialiased`} style={{ background: '#0B0B0B', minHeight: '100vh' }}>
+        <div className="min-h-screen bg-[#0B0B0B]">
+          {children}
+        </div>
       </body>
     </html>
   )
