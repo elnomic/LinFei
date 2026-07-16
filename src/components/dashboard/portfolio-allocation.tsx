@@ -10,15 +10,19 @@ export function PortfolioAllocation() {
   ]
 
   return (
-    <div className="bg-card p-4 rounded-lg border border-border">
-      <h3 className="font-semibold mb-4">Portfolio Allocation</h3>
-      <div className="space-y-2">
+    <div>
+      <div className="flex items-center justify-between mb-3">
+        <h3 className="text-sm font-semibold text-white">Portfolio Allocation</h3>
+        <button className="text-xs text-[#5B8CFF]">View All</button>
+      </div>
+      
+      <div className="space-y-2.5">
         {data.map((item) => (
           <div key={item.name} className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
-            <span className="text-sm flex-1">{item.name}</span>
-            <span className="text-sm font-medium">{item.value}%</span>
-            <div className="w-24 h-1.5 bg-muted rounded-full overflow-hidden">
+            <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ backgroundColor: item.color }} />
+            <span className="text-sm text-white flex-1">{item.name}</span>
+            <span className="text-sm font-medium text-white">{item.value}%</span>
+            <div className="w-20 h-1.5 bg-[#2A2A2A] rounded-full overflow-hidden">
               <div 
                 className="h-full rounded-full transition-all" 
                 style={{ width: `${item.value}%`, backgroundColor: item.color }}
