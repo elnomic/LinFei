@@ -1,27 +1,26 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { TrendingUp, TrendingDown, Star } from 'lucide-react'
-import { formatCurrency, formatNumber } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
+import { TrendingUp, TrendingDown } from 'lucide-react'
+import { formatCurrency, cn } from '@/lib/utils'
 
 interface Market {
   symbol: string
   price: number
   change: number
   volume: number
-  fundingRate: number
 }
 
 export function TopMarkets() {
-  const [markets, setMarkets] = useState<Market[]>([
-    { symbol: 'BTC', price: 43250, change: 2.5, volume: 1250000000, fundingRate: 0.01 },
-    { symbol: 'ETH', price: 2250, change: -1.2, volume: 750000000, fundingRate: 0.02 },
-    { symbol: 'SOL', price: 95, change: 5.8, volume: 350000000, fundingRate: 0.03 },
-    { symbol: 'XRP', price: 0.65, change: -0.5, volume: 280000000, fundingRate: 0.01 },
-    { symbol: 'SUI', price: 1.85, change: 3.2, volume: 120000000, fundingRate: 0.05 },
-  ])
   const router = useRouter()
+  
+  const markets: Market[] = [
+    { symbol: 'BTC', price: 43250, change: 2.5, volume: 1250000000 },
+    { symbol: 'ETH', price: 2250, change: -1.2, volume: 750000000 },
+    { symbol: 'SOL', price: 95, change: 5.8, volume: 350000000 },
+    { symbol: 'XRP', price: 0.65, change: -0.5, volume: 280000000 },
+    { symbol: 'SUI', price: 1.85, change: 3.2, volume: 120000000 },
+  ]
 
   return (
     <div className="bg-card p-4 rounded-lg border border-border">
